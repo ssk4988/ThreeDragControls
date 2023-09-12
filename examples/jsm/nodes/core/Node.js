@@ -40,6 +40,12 @@ class Node extends EventDispatcher {
 
 	}
 
+	updateReference() {
+
+		return this;
+
+	}
+
 	isGlobal( /*builder*/ ) {
 
 		return false;
@@ -105,13 +111,21 @@ class Node extends EventDispatcher {
 
 	}
 
-	getNodeType( /*builder*/ ) {
+	getNodeType( builder ) {
+
+		const nodeProperties = builder.getNodeProperties( this );
+
+		if ( nodeProperties.outputNode ) {
+
+			return nodeProperties.outputNode.getNodeType( builder );
+
+		}
 
 		return this.nodeType;
 
 	}
 
-	getReference( builder ) {
+	getShared( builder ) {
 
 		const hash = this.getHash( builder );
 		const nodeFromHash = builder.getNodeFromHash( hash );
@@ -186,7 +200,7 @@ class Node extends EventDispatcher {
 
 	build( builder, output = null ) {
 
-		const refNode = this.getReference( builder );
+		const refNode = this.getShared( builder );
 
 		if ( this !== refNode ) {
 

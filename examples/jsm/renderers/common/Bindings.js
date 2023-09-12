@@ -48,9 +48,9 @@ class Bindings extends DataMap {
 
 		if ( data.bindings === undefined ) {
 
-			const nodeBuilder = this.nodes.getForCompute( computeNode );
+			const nodeBuilderState = this.nodes.getForCompute( computeNode );
 
-			const bindings = nodeBuilder.getBindings();
+			const bindings = nodeBuilderState.bindings;
 
 			data.bindings = bindings;
 
@@ -80,9 +80,11 @@ class Bindings extends DataMap {
 
 		for ( const binding of bindings ) {
 
-			if ( binding.isSampler || binding.isSampledTexture ) {
+			if ( binding.isSampledTexture ) {
 
-				this.textures.updateTexture( binding.texture );
+				const store = binding.store === true;
+
+				this.textures.updateTexture( binding.texture, { store } );
 
 			} else if ( binding.isStorageBuffer ) {
 

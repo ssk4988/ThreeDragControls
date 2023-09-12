@@ -53,6 +53,12 @@ class TextureNode extends UniformNode {
 
 	}
 
+	updateReference( /*frame*/ ) {
+
+		return this.value;
+
+	}
+
 	getTextureMatrix( uvNode ) {
 
 		const texture = this.value;
@@ -86,7 +92,7 @@ class TextureNode extends UniformNode {
 
 		if ( ! uvNode ) uvNode = this.getDefaultUV();
 
-		if ( this.updateMatrix ) {
+		if ( this.updateMatrix === true ) {
 
 			uvNode = this.getTextureMatrix( uvNode );
 
@@ -168,8 +174,12 @@ class TextureNode extends UniformNode {
 
 				builder.addLineFlowCode( `${propertyName} = ${snippet}` );
 
-				nodeData.snippet = snippet;
-				nodeData.propertyName = propertyName;
+				if ( builder.context.tempWrite !== false ) {
+
+					nodeData.snippet = snippet;
+					nodeData.propertyName = propertyName;
+
+				}
 
 			}
 
